@@ -8,28 +8,27 @@ import (
 	"go.uber.org/zap"
 )
 
-type CCResponse struct {
-	CCContests []models.Contest `json:"cc_future_contests"`
+type CFResponse struct {
+	CFContests []models.Contest `json:"cf_future_contests"`
 }
 
-func FetchCodeChef(logger *zap.SugaredLogger, ch chan []models.Contest) {
-	url := "https://www.codechef.com/api/list/contests/all"
+func FetchCodeForces(logger *zap.SugaredLogger, ch chan []models.Contest) {
+	url := "https://codeforces.com/api/contest.list"
 
 	res, err := http.Get(url)
 	if err != nil {
-		logger.Errorf("Error fetching data from codechef API: %v", err)
+		logger.Errorf("Error fetching data from codeforces API: %v", err)
 		ch <- nil
 		return
 	}
 
 	defer res.Body.Close()
 
-	var data CCResponse
+	var data CFResponse
 	json.NewDecoder(res.Body).Decode(&data)
 
 	var contests []models.Contest
-
-	for _, c := range data.CCContests {
+	for _, c := range data.CFContests {
 		contests = append(contests, models.Contest{
 			Name:  c.Name,
 			Code:  c.Code,
