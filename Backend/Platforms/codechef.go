@@ -8,8 +8,14 @@ import (
 	"go.uber.org/zap"
 )
 
+type CCContest struct {
+	ContestCode  string `json:"contest_code"`
+	ContestName  string `json:"contest_name"`
+	ContestStart string `json:"contest_start_date"`
+	ContestEnd   string `json:"contest_end_date"`
+}
 type CCResponse struct {
-	CCContests []models.Contest `json:"cc_future_contests"`
+	FutureContests []CCContest `json:"future_contests"`
 }
 
 func FetchCodeChef(logger *zap.SugaredLogger, ch chan []models.Contest) {
@@ -25,16 +31,20 @@ func FetchCodeChef(logger *zap.SugaredLogger, ch chan []models.Contest) {
 	defer res.Body.Close()
 
 	var data CCResponse
-	json.NewDecoder(res.Body).Decode(&data)
+	if err := json.NewDecoder(res.Body).Decode(&data); err != nil {
+		logger.Errorf("Error decoding codechef response %v", err)
+		ch <- nil
+		return
+	}
 
 	var contests []models.Contest
 
-	for _, c := range data.CCContests {
+	for _, c := range data.FutureContests {
 		contests = append(contests, models.Contest{
-			Name:  c.Name,
-			Code:  c.Code,
-			Start: c.Start,
-			End:   c.End,
+			Name:  c.ContestName,
+			Code:  c.ContestCode,
+			Start: c.ContestStart,
+			End:   c.ContestEnd,
 		})
 	}
 
