@@ -3,9 +3,11 @@ package main
 import (
 	"sync"
 
+	"github.com/gin-gonic/gin"
 	platforms "github.com/vihantandon/Coders_Hub/Platforms"
 	"github.com/vihantandon/Coders_Hub/boot"
 	"github.com/vihantandon/Coders_Hub/models"
+	"github.com/vihantandon/Coders_Hub/routes"
 )
 
 func main() {
@@ -34,4 +36,11 @@ func main() {
 			logger.Infof("Contests: %s", c.Name)
 		}
 	}
+
+	boot.InitDB()
+
+	r := gin.Default()
+	routes.SetupRoutes(r)
+
+	r.Run(":8080")
 }
