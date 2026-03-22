@@ -1,9 +1,11 @@
 package main
 
 import (
+	"log"
 	"sync"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	platforms "github.com/vihantandon/Coders_Hub/Platforms"
 	"github.com/vihantandon/Coders_Hub/boot"
 	"github.com/vihantandon/Coders_Hub/models"
@@ -11,6 +13,10 @@ import (
 )
 
 func main() {
+	if err := godotenv.Load(); err != nil {
+		log.Fatal("error loading .env file")
+	}
+
 	logger := boot.InitializeApp()
 
 	var wg sync.WaitGroup
