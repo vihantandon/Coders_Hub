@@ -80,7 +80,7 @@ func Login(c *gin.Context) {
 	}
 
 	//Validate Password not empty
-	if len(user.Password) == 0 {
+	if len(input.Password) == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Password cant be empty"})
 		return
 	}
@@ -110,9 +110,7 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "Login successful"})
-	c.JSON(http.StatusOK, gin.H{"token": tokenString})
-
+	c.JSON(http.StatusOK, gin.H{"message": "Login successful", "token": tokenString})
 }
 
 func ValidateMail(email string) bool {
