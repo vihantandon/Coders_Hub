@@ -47,10 +47,11 @@ func FetchCodeForces(logger *zap.SugaredLogger, ch chan []models.Contest) {
 		starTime := time.Unix(c.StartTimeSeconds, 0).UTC()
 		endTime := time.Unix(c.StartTimeSeconds+c.DurationSeconds, 0).UTC()
 		contests = append(contests, models.Contest{
-			Name:  c.Name,
-			Code:  fmt.Sprintf("%d", c.ID),
-			Start: starTime.Format("2006-01-02 15:04:05"),
-			End:   endTime.Format("2006-01-02 15:04:05"),
+			Name:     c.Name,
+			Code:     fmt.Sprintf("%d", c.ID),
+			Platform: "Codeforces",
+			Start:    starTime.Format("2006-01-02 15:04:05"),
+			End:      endTime.Format("2006-01-02 15:04:05"),
 		})
 	}
 

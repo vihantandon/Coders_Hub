@@ -41,10 +41,11 @@ func FetchCodeChef(logger *zap.SugaredLogger, ch chan []models.Contest) {
 
 	for _, c := range data.FutureContests {
 		contests = append(contests, models.Contest{
-			Name:  c.ContestName,
-			Code:  c.ContestCode,
-			Start: c.ContestStart,
-			End:   c.ContestEnd,
+			Name:     c.ContestName,
+			Code:     c.ContestCode,
+			Platform: "CodeChef",
+			Start:    c.ContestStart,
+			End:      c.ContestEnd,
 		})
 	}
 

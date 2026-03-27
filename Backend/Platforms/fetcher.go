@@ -28,7 +28,7 @@ func FetchAndStore(logger *zap.SugaredLogger) {
 		go func(pf platformFetcher) {
 			defer wg.Done()
 			pf.fn(logger, ch)
-		}(f)
+		}(f) //f is passed here to avoid closure bug i.e every go routine will have their own memory and value
 	}
 
 	wg.Wait()
