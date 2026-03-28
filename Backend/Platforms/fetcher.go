@@ -6,6 +6,7 @@ import (
 	"github.com/vihantandon/Coders_Hub/boot"
 	"github.com/vihantandon/Coders_Hub/models"
 	"go.uber.org/zap"
+	"gorm.io/gorm/clause"
 )
 
 func FetchAndStore(logger *zap.SugaredLogger) {
@@ -38,11 +39,10 @@ func FetchAndStore(logger *zap.SugaredLogger) {
 	for contests := range ch {
 		for _, c := range contests {
 
-			result := boot.DB.Where(models.Contest{Code: c.Code, Platform: c.Platform}).Assign(models.Contest{
-				Name:  c.Name,
-				Start: c.Start,
-				End:   c.End,
-			}).FirstOrCreate(&c)
+			result := boot.DB.Clauses(clause.OnConflict{
+				Columns:   []clause.Column{{Name: "platform"}, {Name: "code"}},
+				DoUpdates: clause.AssignmentColumns([]string{"name", "start", "end"}),
+			}).Create(&c)
 
 			if result.Error != nil {
 				logger.Errorf("Failed to upsert contests %s: %v", c.Name, result.Error)
@@ -52,5 +52,5 @@ func FetchAndStore(logger *zap.SugaredLogger) {
 		}
 	}
 
-	logger.Info("Fetched and stored %d contests", total)
+	logger.Infof("Fetched and stored %d contests", total)
 }

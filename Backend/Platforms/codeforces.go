@@ -42,8 +42,13 @@ func FetchCodeForces(logger *zap.SugaredLogger, ch chan []models.Contest) {
 	}
 
 	var contests []models.Contest
+	now := time.Now().Unix()
 
 	for _, c := range data.Result {
+		if c.StartTimeSeconds < now {
+			continue
+		}
+
 		starTime := time.Unix(c.StartTimeSeconds, 0).UTC()
 		endTime := time.Unix(c.StartTimeSeconds+c.DurationSeconds, 0).UTC()
 		contests = append(contests, models.Contest{

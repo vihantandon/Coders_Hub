@@ -12,8 +12,8 @@ import (
 
 type LCContest struct {
 	Title     string `json:"title"`
-	TitleSlug string `json:"titleslug"`
-	StartTime int64  `json:"starttime"`
+	TitleSlug string `json:"titleSlug"`
+	StartTime int64  `json:"startTime"`
 	Duration  int    `json:"duration"`
 }
 
@@ -31,7 +31,7 @@ func FetchLeetcode(logger *zap.SugaredLogger, ch chan []models.Contest) {
 		"query": "{allContests {title titleSlug startTime duration}}"
 	}`
 
-	req, err := http.NewRequest("POST", "https://leetcode.com/graphq1",
+	req, err := http.NewRequest("POST", "https://leetcode.com/graphql",
 		bytes.NewBuffer([]byte(query)))
 
 	if err != nil {
