@@ -14,6 +14,8 @@ func SetupRoutes(r *gin.Engine) {
 	protected := r.Group("/")
 	protected.Use(middleware.AuthMiddleware())
 	{
-
+		protected.POST("/reminders", handlers.CreateReminder)
+		protected.GET("/reminders", handlers.GetReminders)
+		protected.DELETE("/reminders/:id", handlers.DeleteReminder)
 	}
 }
