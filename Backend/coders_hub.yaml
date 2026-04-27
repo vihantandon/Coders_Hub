@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: coders_hub_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: avnivihan0
+      POSTGRES_DB: coders_hub
+    ports:
+      - "5432:5432"

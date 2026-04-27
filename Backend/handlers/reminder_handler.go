@@ -52,7 +52,7 @@ func CreateReminder(c *gin.Context) {
 	}
 
 	var existing models.Reminder
-	if err := boot.DB.Where("user_id = ? AND contest_id = ?", userID, input.ContestID).First(&existing).Error; err != nil {
+	if err := boot.DB.Where("user_id = ? AND contest_id = ?", userID, input.ContestID).First(&existing).Error; err == nil {
 		c.JSON(http.StatusConflict, gin.H{"error": "Reminder already set for this contest"})
 		return
 	}
