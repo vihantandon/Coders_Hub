@@ -3,6 +3,7 @@ package platforms
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"github.com/vihantandon/Coders_Hub/models"
 	"go.uber.org/zap"
@@ -40,12 +41,23 @@ func FetchCodeChef(logger *zap.SugaredLogger, ch chan []models.Contest) {
 	var contests []models.Contest
 
 	for _, c := range data.FutureContests {
+		layout := "02 Jan 2006  15:04:05"
+
+		startTime, err1 := time.Parse(layout, c.ContestStart)
+		endTime, err2 := time.Parse(layout, c.ContestEnd)
+
+		if err1 != nil || err2 != nil {
+			logger.Errorf("Error parsing time: %v %v", err1, err2)
+			continue
+		}
+
+		formattedLayout := "2006-01-02 15:04:05"
 		contests = append(contests, models.Contest{
 			Name:     c.ContestName,
 			Code:     c.ContestCode,
 			Platform: "CodeChef",
-			Start:    c.ContestStart,
-			End:      c.ContestEnd,
+			Start:    startTime.Format(formattedLayout),
+			End:      endTime.Format(formattedLayout),
 		})
 	}
 
